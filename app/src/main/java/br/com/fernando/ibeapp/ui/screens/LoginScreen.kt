@@ -24,6 +24,7 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,13 +36,21 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import br.com.fernando.ibeapp.ui.theme.IBEDarkBlue
 import br.com.fernando.ibeapp.ui.theme.IBEYellow
+import br.com.fernando.ibeapp.viewmodel.LoginViewModel
 
 @Composable
-fun LoginScreen() {
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+fun LoginScreen(viewmodel: LoginViewModel = viewModel()) {
+
+    val emailState = viewmodel.email.collectAsState()
+    val email = emailState.value
+
+    val passwordState = viewmodel.password.collectAsState()
+    val password = passwordState.value
+
+
     val roundedCornerShape = RoundedCornerShape(20.dp)
 
     Scaffold(
@@ -72,7 +81,7 @@ fun LoginScreen() {
             Spacer(modifier = Modifier.height(16.dp))
             OutlinedTextField(
                 value = email,
-                onValueChange = { email = it },
+                onValueChange = { viewmodel.onEmailChange(it) },
                 label = { Text("E-mail", color = Color.White) },
                 shape = roundedCornerShape,
                 colors = OutlinedTextFieldDefaults.colors(
@@ -84,7 +93,7 @@ fun LoginScreen() {
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
                 value = password,
-                onValueChange = { password = it },
+                onValueChange = { viewmodel.onPasswordChange(it) },
                 label = { Text("Senha", color = Color.White) },
                 visualTransformation = PasswordVisualTransformation(),
                 shape = roundedCornerShape,
@@ -103,8 +112,10 @@ fun LoginScreen() {
             )
             Spacer(modifier = Modifier.height(16.dp))
             Button(
-                onClick = { /* TODO: Ação de login */ },
-                Modifier.width(270.dp).height(50.dp),
+                onClick = { viewmodel.onLoginClick() },
+                Modifier
+                    .width(270.dp)
+                    .height(50.dp),
                 shape = roundedCornerShape,
                 colors = ButtonDefaults.buttonColors(containerColor = IBEYellow),
             ) {
