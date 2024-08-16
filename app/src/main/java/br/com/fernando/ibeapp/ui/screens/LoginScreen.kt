@@ -50,7 +50,6 @@ fun LoginScreen(viewmodel: LoginViewModel = viewModel()) {
     val passwordState = viewmodel.password.collectAsState()
     val password = passwordState.value
 
-
     val roundedCornerShape = RoundedCornerShape(20.dp)
 
     Scaffold(
@@ -116,7 +115,6 @@ fun LoginScreen(viewmodel: LoginViewModel = viewModel()) {
                 Modifier
                     .width(270.dp)
                     .height(50.dp),
-                shape = roundedCornerShape,
                 colors = ButtonDefaults.buttonColors(containerColor = IBEYellow),
             ) {
                 Text("ACESSAR")
